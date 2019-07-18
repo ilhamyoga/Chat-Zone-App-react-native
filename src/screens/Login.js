@@ -5,6 +5,8 @@ import { w, h, totalSize } from '../components/Dimensions';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import { Input } from 'react-native-elements';
 
+import LinearGradient from 'react-native-linear-gradient';
+
 export default class Login extends Component {
 
   static navigationOptions = {
@@ -45,15 +47,16 @@ export default class Login extends Component {
               }
             />
           </View>
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('Home')}
-            style={styles.button}
-            activeOpacity={0.6}
-          >
-            {this.props.isLogin
-              ? <ActivityIndicator size="large" style={styles.spinner} color='white' />
-              : <Text style={styles.text}>GET STARTED</Text>}
-          </TouchableOpacity>
+          <LinearGradient start={{x: 0, y: 0}} locations={[0,0.5,0.6]} colors={['#4c669f', '#3b5998', '#192f6a']} style={styles.linearGradient}>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('Home')}
+              style={styles.button}
+            >
+              {this.props.isLogin
+                ? <ActivityIndicator size="large" style={styles.spinner} color='white' />
+                : <Text style={styles.text}>GET STARTED</Text>}
+            </TouchableOpacity>
+          </LinearGradient>
         </View>
         <TouchableOpacity
           onPress={() => this.props.navigation.navigate('Register')}
@@ -110,7 +113,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: w(2),
-    backgroundColor: '#888',
     borderRadius: w(10),
     marginBottom: -25
   },

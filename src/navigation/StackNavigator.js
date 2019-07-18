@@ -1,10 +1,15 @@
 import { createStackNavigator, createAppContainer } from 'react-navigation';
-import Login from '../screens/Login';
-import Register from '../screens/Register';
+import Auth from '../components/Auth'
+import Login from '../screens/Login2';
+import Register from '../screens/Register2';
 import Home from '../screens/Home';
-import Chats from '../screens/Chats';
+import Chat from '../screens/Chat';
+import Chatting from '../components/Chatting';
 
 const MyStackNavigator = createStackNavigator({
+    Auth: {
+        screen: Auth
+    },
     Login: {
         screen: Login
     },
@@ -14,10 +19,16 @@ const MyStackNavigator = createStackNavigator({
     Home: {
         screen: Home
     },
-    Chats: {
-        screen: Chats
+    Chat: {
+        screen: Chat
     },
-    initialRouteName: 'Home'
-})
+    Chatting: {
+        screen: Chatting
+    },
+},
+    {
+        initialRouteName: 'Auth'
+    }
+)
 const HomeContainer = createAppContainer(MyStackNavigator)
 export default HomeContainer

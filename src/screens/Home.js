@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, View, Image, AsyncStorage, TouchableOpacity, ScrollView } from 'react-native';
 import { Text, Avatar, Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon2 from 'react-native-vector-icons/FontAwesome5';
@@ -10,6 +10,11 @@ export default class Home extends Component {
 
   static navigationOptions = {
     header: null
+  }
+
+  _logOut = async () => {
+      await AsyncStorage.clear();
+      this.props.navigation.navigate('Login')
   }
 
   state = {
@@ -60,12 +65,16 @@ export default class Home extends Component {
                 { (this.state.viewDetail == true) ?
                     <View style={styles.detail}>
                         <View style={styles.detailHeader}>
-                            <Icon
+                            <TouchableOpacity
                                 style={{position:'absolute', right:0, padding:5}}
-                                name='close'
-                                size={35}
-                                color='rgba(0, 61, 61, 0.99)'
-                            />
+                                onPress={() => this.handleView()}
+                            >
+                                <Icon
+                                    name='close'
+                                    size={30}
+                                    color='rgba(0, 61, 61, 0.99)'
+                                />
+                            </TouchableOpacity>
                         </View>
                         <ScrollView style={styles.detailBody}>
                             <View style={{flexDirection:'row', borderWidth:2}}>
@@ -112,7 +121,7 @@ export default class Home extends Component {
                             />
                         }
                         title="CONTACT"
-                        onPress={()=> this.props.navigation.navigate('Chats')}
+                        onPress={()=> this.props.navigation.navigate('Chat')}
                     />
                 </View>
                 <View style={{left:20, flex:1}}>
@@ -126,8 +135,8 @@ export default class Home extends Component {
                                 color="white"
                             />
                         }
-                        title="CHATS"
-                        onPress={()=> this.props.navigation.navigate('Chats')}
+                        title="CHAT"
+                        onPress={()=> this.props.navigation.navigate('Chat')}
                     />
                 </View>
             </View>
@@ -174,15 +183,15 @@ const styles = StyleSheet.create({
         flex:1,
         backgroundColor: '#fff',
         elevation:5,
-        borderRadius:8,
+        borderRadius:10,
     },
 
     detailHeader:{
         height:140,
         backgroundColor:'grey',
         elevation:2,
-        borderTopLeftRadius:5,
-        borderTopRightRadius:5
+        borderTopLeftRadius:10,
+        borderTopRightRadius:10
     },
 
     detailBody:{
