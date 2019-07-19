@@ -13,6 +13,10 @@ export default class Auth extends Component {
         this._bootstrapAsync()
     }
 
+    static navigationOptions = {
+        header: null
+    }
+
     componentWillMount(){
         if (!firebase.apps.length) {
             var firebaseConfig = {
@@ -32,7 +36,7 @@ export default class Auth extends Component {
     _bootstrapAsync = async () => {
         User.uid = await AsyncStorage.getItem('userUid');
         console.warn(User.uid)
-        this.props.navigation.navigate(User.uid ? 'Chat' : 'Login')
+        this.props.navigation.navigate(User.uid ? 'Home' : 'Login')
     }
 
     render(){

@@ -23,7 +23,7 @@ export default class Chat extends Component {
         }
     }
 
-    componentWillMount() {
+    componentWillMount() {  
         let dbRef = firebase.database().ref('users');
         dbRef.on('child_added', (val) =>{
             let person = val.val();

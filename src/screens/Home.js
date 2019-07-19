@@ -109,14 +109,14 @@ export default class Home extends Component {
                     : null
                 }
             <View style={styles.footer}>
-                <View style={{right:20, flex:1}}>
+                <View style={{right:25, flex:1}}>
                     <Button
-                        buttonStyle={{borderRadius:20}}
+                        buttonStyle={{borderRadius:20, width:'90%'}}
                         icon={
                             <Icon
                                 style={{marginRight:10}}
                                 name="contacts"
-                                size={32}
+                                size={27}
                                 color="white"
                             />
                         }
@@ -124,14 +124,14 @@ export default class Home extends Component {
                         onPress={()=> this.props.navigation.navigate('Chat')}
                     />
                 </View>
-                <View style={{left:20, flex:1}}>
+                <View style={{left:50, flex:1}}>
                     <Button
-                        buttonStyle={{borderRadius:20}}
+                        buttonStyle={{borderRadius:20, width:'90%'}}
                         icon={
                             <Icon
-                                style={{marginRight:10}}
+                                style={{marginRight:10,}}
                                 name="forum"
-                                size={32}
+                                size={27}
                                 color="white"
                             />
                         }

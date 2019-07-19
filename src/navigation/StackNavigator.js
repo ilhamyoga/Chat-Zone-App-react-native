@@ -1,7 +1,7 @@
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 import Auth from '../components/Auth'
-import Login from '../screens/Login2';
-import Register from '../screens/Register2';
+import Login from '../screens/Login';
+import Register from '../screens/Register';
 import Home from '../screens/Home';
 import Chat from '../screens/Chat';
 import Chatting from '../components/Chatting';

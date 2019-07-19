@@ -18,6 +18,7 @@ export default class Login extends React.Component {
   }
 
 	onPressLogin = async () => {
+	console.warn(this.state.email, this.state.password)
     firebase
       .auth()
       .signInWithEmailAndPassword(this.state.email, this.state.password)

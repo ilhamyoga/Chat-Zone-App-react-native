@@ -46,18 +46,6 @@ export default class Signup extends React.Component {
 		// alert(this.state.email +'\n'+this.state.password +'\n'+this.state.name)
     };
 
-    componentWillMount(){
-        AsyncStorage.getItem('userPhone').then(val=>{
-            if(val){
-                this.setState({ phone:val })
-            }
-        })
-    }
-
-	// onChangeTextEmail = email => this.setState({ email });
-	// onChangeTextPassword = password => this.setState({ password });
-	// onChangeTextName = name => this.setState({ name });
-
 	render() {
 		return (
 			<View>
