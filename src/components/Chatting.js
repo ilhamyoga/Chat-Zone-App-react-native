@@ -24,13 +24,12 @@ export default class Chatting extends React.Component {
   }
 
   componentWillMount(){
-    console.log('User', User.uid)
-    console.log('Child', this.state.person.uid)
     firebase.database().ref('messages').child(User.uid).child(this.state.person.uid)
       .on('child_added',(value)=>{
         this.setState((prevState)=>{
+          console.warn(prevState.messageList, value.val())
           return {
-            messageList: [...prevState.messageList, value.val()]
+            messageList: GiftedChat.append(prevState.messageList, value.val())
           }
         })
       })
@@ -51,12 +50,14 @@ export default class Chatting extends React.Component {
   // }
   sendMessage = async () => {
     let msgId = firebase.database().ref('messages').child(User.uid).child(this.state.person.uid).push().key
-    console.log('CEK',msgId)
     let updates  = {}
     let message = {
-      message: this.state.textMessage,
-      time: firebase.database.ServerValue.TIMESTAMP,
-      from: this.state.person.uid
+      _id: msgId,
+      text: this.state.textMessage,
+      createdAt: firebase.database.ServerValue.TIMESTAMP,
+      user: {
+        _id: User.uid
+      },
     }
     updates['messages/'+ User.uid + '/' + this.state.person.uid + '/' + msgId] = message 
     updates['messages/'+ this.state.person.uid + '/' + User.uid + '/' + msgId] = message 
@@ -64,43 +65,18 @@ export default class Chatting extends React.Component {
     this.setState({ textMessage: '' });
   }
 
-  renderRow = ({item}) => {
-    return(
-      <View style={{
-        flexDirection:'row', 
-        alignSelf: item.from===User.uid ? 'flex-start' : 'flex-end',
-        backgroundColor: item.from===User.uid ? '#7cb342' : '#00897b',
-        borderRadius: 5,
-        marginBottom:10
-      }}>
-        <Text style={{color:'#fff', padding:7, fontSize:16}}>
-          {item.message}
-        </Text>
-        <Text style={{color:'#eee'}}>
-          {item.time}
-        </Text>
-      </View>
-    )
-  }
-
   render() {
+    console.warn(this.state.person.uid)
     return (
-      // <GiftedChat
-      //   messages={this.state.messages}
-      //   onSend={firebaseSDK.send}
-      //   user={this.user}
-      // />
-      <View>
-          <FlatList
-            data={this.state.messageList}
-            renderItem={this.renderRow}
-            keyExtractor={(item,index)=>index.toString()}
-          />
-          <TextInput onChangeText={this.handleChange('textMessage')} value={this.state.textMessage}/>
-          <TouchableOpacity onPress={this.sendMessage}>
-            <Text>SEND</Text>
-          </TouchableOpacity>
-      </View>
+      <GiftedChat
+        text={this.state.textMessage}
+        messages={this.state.messageList}
+        user={{
+            _id : User.uid
+        }}
+        onInputTextChanged={this.handleChange('textMessage')}
+        onSend={this.sendMessage}
+      />
     );
   }
 }
