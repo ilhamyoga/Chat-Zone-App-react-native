@@ -56,43 +56,55 @@ export default class Login extends Component {
               source={ require('../assets/logo_t.png') } 
             />
             <View style={styles.card}>
-              {/* { (this.state.isError == true) ?
+              { (this.state.isError == true) ?
                 <Text style={{color:'red', textAlign:'center'}}>Wrong Username & Password</Text>
                 : null
-              } */}
-              <Input
-                containerStyle={{marginBottom:10}}
-                inputContainerStyle={{borderBottomColor:'#424E61'}}
-                inputStyle={{color:'#f7a0a4', textAlign:'center'}}
-                onChangeText={this.handleChange('email')}
-                placeholderTextColor='#5A6675'
-                placeholder='Email'
-                leftIcon={
-                  <Icon
-                    style={{marginLeft:-10}}
-                    name='email'
-                    size={27}
-                    color='#424E61'
-                  />
+              }
+              <View style={{flex:1, marginBottom:10}}>
+                <Input
+                  inputContainerStyle={{borderBottomColor:'#424E61'}}
+                  inputStyle={{color:'#f7a0a4', textAlign:'center'}}
+                  onChangeText={this.handleChange('email')}
+                  placeholderTextColor='#5A6675'
+                  placeholder='Email'
+                  leftIcon={
+                    <Icon
+                      style={{marginLeft:-10}}
+                      name='email'
+                      size={27}
+                      color='#424E61'
+                    />
+                  }
+                />
+                {/* { 
+                  (this.state.email == 0) ?
+                  <Text style={{color:'red', textAlign:'center'}}>Wrong Username & Password</Text>
+                  : null
+                } */}
+              </View>
+
+              <View style={{flex:1, marginBottom:35}}>
+                <Input
+                  inputContainerStyle={{borderBottomColor:'#424E61'}}
+                  inputStyle={{color:'#f7a0a4', textAlign:'center'}}
+                  onChangeText={this.handleChange('password')}
+                  secureTextEntry={true}
+                  placeholderTextColor='#5A6675'
+                  placeholder='Password'
+                  leftIcon={
+                    <Icon
+                      style={{marginLeft:-10}}
+                      name='lock'
+                      size={27}
+                      color='#424E61'
+                    />
+                  }
+                />
+                { (this.state.password.length < 6 && this.state.password.length > 0 ) ?
+                  <Text style={{color:'red', textAlign:'center'}}>minimum password length 6</Text>
+                  : null
                 }
-              />
-              <Input
-                containerStyle={{marginBottom:35}}
-                inputContainerStyle={{borderBottomColor:'#424E61'}}
-                inputStyle={{color:'#f7a0a4', textAlign:'center'}}
-                onChangeText={this.handleChange('password')}
-                secureTextEntry={true}
-                placeholderTextColor='#5A6675'
-                placeholder='Password'
-                leftIcon={
-                  <Icon
-                    style={{marginLeft:-10}}
-                    name='lock'
-                    size={27}
-                    color='#424E61'
-                  />
-                }
-              />
+              </View>
             </View>
 
             <View style={{width:'81%'}}>
@@ -147,7 +159,6 @@ const styles = StyleSheet.create({
 
   card:{
     width:'86%',
-    alignItems:'center',
     justifyContent:'center'
   },
 

@@ -1,11 +1,10 @@
 import React from 'react';
-import { TextInput, Text, View, AsyncStorage } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat'; // 0.3.0
-import { TouchableOpacity, FlatList } from 'react-native-gesture-handler';
 import User from '../../User';
 import firebase from 'firebase';
 
 export default class Chatting extends React.Component {
+  
   static navigationOptions = ({ navigation }) => ({
     title: (navigation.state.params || {}).name || 'Chat!'
   });
@@ -39,15 +38,6 @@ export default class Chatting extends React.Component {
     this.setState({ [key]: val })
   }
 
-  // get user() {
-  //   return {
-  //     name: this.props.navigation.state.params.name,
-  //     email: this.props.navigation.state.params.email,
-  //     avatar: this.props.navigation.state.params.avatar,
-  //     id: firebaseSDK.uid,
-  //     _id: firebaseSDK.uid
-  //   };
-  // }
   sendMessage = async () => {
     let msgId = firebase.database().ref('messages').child(User.uid).child(this.state.person.uid).push().key
     let updates  = {}
