@@ -6,6 +6,8 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Input } from 'react-native-elements';
 
 import firebase from 'firebase';
+import User from '../../User';
+import GetLocation from 'react-native-get-location'
 
 export default class Login extends Component {
 
@@ -13,44 +15,83 @@ export default class Login extends Component {
     header: null
   }
 
-  state = {
-		email: '',
-    password: '',
-    isLoading: false,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: '',
+      password: '',
+      isLoading: false,
+    }
+    this._getLocation();
+  }
 
   handleChange = key => val => {
     this.setState({ [key]: val })
   }
 
+  _getLocation = () => {
+    GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 15000,
+    })
+    .then(location => {
+        this.setState({
+          latitude: location.latitude,
+          longitude: location.longitude,
+        })
+    })
+    .catch(error => {
+        alert('Get location error')
+    })
+  }
+
+  updateLocation = async() => {
+    console.warn(this.state.latitude)
+    let updates = {};
+     
+    let containt = {
+      latitude: this.state.latitude,
+      longitude: this.state.longitude
+    };
+
+    updates['users/' + User.uid + '/location'] = containt;
+    firebase.database().ref().update(updates);
+  }
+
   onPressLogin = async () => {
-    console.warn(this.state.email, this.state.password)
+    this.setState({ isLoading: true})
     firebase
       .auth()
       .signInWithEmailAndPassword(this.state.email, this.state.password)
       .then((response)=>{
-        AsyncStorage.setItem('userUid', response.user.uid);
+        User.uid = response.user.uid
+        AsyncStorage.setItem('userUid', User.uid);
+        this.updateLocation();
+        
+        console.warn('Tes 1')
+
+        this.setState({ isLoading: false})
         this.props.navigation.navigate('Home')
-        this.setState({ isLoading: true})
       })
-      .catch(function(error) {
+      .catch(error => {
         alert('Wrong Username & Password')
+        this.setState({ isLoading: false})
       })
-	};
+  };
 
   render() {
     return (
       <View style={styles.container}>
-        <ScrollView style={{flex:1}}>
-          <View style={{alignItems:'center'}}>
-
-          { (this.state.isLoading == true) ?
-            <View>
-              <ActivityIndicator/>
+        { (this.state.isLoading == true) ?
+            <View style={styles.modal}>
+              <View style={styles.loading}>
+                <ActivityIndicator size="large" color="#00ff00" />
+              </View>
             </View>
             : null
-          }
-
+        }
+        <ScrollView style={{flex:1}}>
+          <View style={{alignItems:'center'}}>
             <Image
               style={styles.logoImage}
               source={ require('../assets/logo_t.png') } 
@@ -146,6 +187,22 @@ Login.propTypes = {
 };
 
 const styles = StyleSheet.create({
+
+  modal : {
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
+  loading: {
+    backgroundColor: 'white',
+    width: 200,
+    height: 100,
+    borderRadius: 5,
+    elevation: 5,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
 
   container:{
     flex:1,

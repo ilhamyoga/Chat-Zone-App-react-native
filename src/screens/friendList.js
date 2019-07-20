@@ -16,7 +16,7 @@ export default class Chat extends Component {
         },
         headerTintColor:'#fff',
         headerTransparent: true,
-        title: 'CHAT'
+        title: 'PEOPLE'
     }
 
     _logOut = async () => {
@@ -32,11 +32,11 @@ export default class Chat extends Component {
         }
     }
 
-    componentWillMount = async() => {
-        let dbRef = firebase.database().ref('messages');
+    componentWillMount() {  
+        let dbRef = firebase.database().ref('users');
         dbRef.on('child_added', (val) =>{
-            let person = val.val();
-            person.userUid = val.key;
+            let person = val.val()
+                person.userUid = val.key;
             if (person.userUid === User.uid){
                 User.name = person.name
             }
@@ -62,9 +62,9 @@ export default class Chat extends Component {
                     : null
                 }
 
-                <TouchableOpacity onPress={this._logOut}>
+                {/* <TouchableOpacity onPress={this._logOut}>
                     <Text>Logout</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 <FlatList
                     data={this.state.users}
                     renderItem={({ item, index }) => (
@@ -83,7 +83,7 @@ export default class Chat extends Component {
                                         {item.name}
                                     </Text>
                                     <Text style={{color:'#8a8d91'}}>
-                                        {item.message}
+                                        {item.messeage}
                                     </Text>
                                 </View>
                             </View>

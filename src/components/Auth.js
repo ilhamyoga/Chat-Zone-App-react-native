@@ -35,7 +35,6 @@ export default class Auth extends Component {
 
     _bootstrapAsync = async () => {
         User.uid = await AsyncStorage.getItem('userUid');
-        console.warn(User.uid)
         this.props.navigation.navigate(User.uid ? 'Home' : 'Login')
     }
 

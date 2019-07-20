@@ -10,7 +10,7 @@ import firebase from 'firebase';
 export default class Login extends Component {
 
   static navigationOptions = {
-    headerStyle:{backgroundColor:'#F25E63'},
+    headerStyle:{ backgroundColor:'#F25E63' },
     headerTintColor: '#fff',
     title: 'Sign Up'
   }

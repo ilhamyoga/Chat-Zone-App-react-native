@@ -1,4 +1,5 @@
 import React from 'react';
+import { Image } from 'react-native'
 import { GiftedChat } from 'react-native-gifted-chat'; // 0.3.0
 import User from '../../User';
 import firebase from 'firebase';
@@ -6,6 +7,12 @@ import firebase from 'firebase';
 export default class Chatting extends React.Component {
   
   static navigationOptions = ({ navigation }) => ({
+    // headerTitle: (
+    //   <Image
+    //       style={{height:20, width:110}}
+    //       source={{uri: props.navigation.getParam('avatar')}}
+    //   />
+    // ),
     title: (navigation.state.params || {}).name || 'Chat!'
   });
 
@@ -13,6 +20,7 @@ export default class Chatting extends React.Component {
     super(props);
     this.state = {
         person: {
+          avatar: props.navigation.getParam('avatar'),
           name: props.navigation.getParam('name'),
           email: props.navigation.getParam('email'),
           uid: props.navigation.getParam('userUid')
