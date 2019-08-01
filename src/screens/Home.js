@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image, AsyncStorage, TouchableOpacity, ScrollView } from 'react-native';
-import { Text, Avatar, Button, Card } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Icon2 from 'react-native-vector-icons/FontAwesome5';
+import { StyleSheet, View, Text, AsyncStorage, TouchableOpacity, ScrollView } from 'react-native';
+import { Avatar, IconButton, Button } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import User from '../../User'
 
 import firebase from 'firebase';
 import MapView, { PROVIDER_GOOGLE, Marker, Callout } from 'react-native-maps';
+
+console.disableYellowBox = false;
 
 export default class Home extends Component {
 
@@ -14,42 +15,44 @@ export default class Home extends Component {
     header: null
   }
 
+  constructor(props){
+    super(props);
+    this.state = {
+        longitude: 0,
+        latitude: 0,
+        myLocation:{
+          latitude: 0,
+          longitude: 0,
+        },
+        users: [],
+    }
+    User.uid = AsyncStorage.getItem('userUid');
+  }
+
   _logOut = async () => {
       await AsyncStorage.clear();
       this.props.navigation.navigate('Login')
   }
 
-  state = {
-    longitude: 0,
-    latitude: 0,
-    users: [],
-    viewDetail: false,
-  };
-
-  handleView(){
-      if(this.state.viewDetail == true){
-        this.setState({viewDetail: false})
-      }
-      else{
-        this.setState({viewDetail: true})
-      }
-  }
-
   componentWillMount = async() => {
-    User.uid = await AsyncStorage.getItem('userUid');
     let dbRef = firebase.database().ref('users');
-    dbRef.once('child_added', (val) =>{
+    dbRef.on('child_added', (val) =>{
         let person = val.val();
         person.userUid = val.key;
-
-        if (person.userUid == User.uid){
-            User.avatar = person.image
+        if (person.userUid === User.uid._55){
+            User.image = person.image
             User.name = person.name
-            User.location = {
+            User.email = person.email
+            User.phone = person.phone
+            this.setState({
+              myLocation:{
                 latitude: person.location.latitude,
-                longitude: person.location.longitude,
-            }
-            console.warn(person.image)
+                longitude: person.location.latitude,
+              }
+            })
+            User.location.latitude = person.location.latitude
+            User.location.longitude = person.location.longitude
+            User.aboutMe = person.aboutMe
         }
         else{
             this.setState((prevState) => {
@@ -64,344 +67,259 @@ export default class Home extends Component {
 
   mapStyle = [
     {
-      "elementType": "geometry",
-      "stylers": [
-        {
-          "color": "#242f3e"
-        }
-      ]
-    },
-    {
-      "elementType": "labels.text.fill",
-      "stylers": [
-        {
-          "color": "#746855"
-        }
-      ]
-    },
-    {
-      "elementType": "labels.text.stroke",
-      "stylers": [
-        {
-          "color": "#242f3e"
-        }
-      ]
-    },
-    {
-      "featureType": "administrative.locality",
-      "elementType": "labels.text.fill",
-      "stylers": [
-        {
-          "color": "#d59563"
-        }
-      ]
-    },
-    {
-      "featureType": "poi",
-      "elementType": "labels.text.fill",
-      "stylers": [
-        {
-          "color": "#d59563"
-        }
-      ]
-    },
-    {
-      "featureType": "poi.park",
-      "elementType": "geometry",
-      "stylers": [
-        {
-          "color": "#263c3f"
-        }
-      ]
-    },
-    {
-      "featureType": "poi.park",
-      "elementType": "labels.text.fill",
-      "stylers": [
-        {
-          "color": "#6b9a76"
-        }
-      ]
-    },
-    {
-      "featureType": "poi.place_of_worship",
-      "elementType": "geometry.fill",
-      "stylers": [
-        {
-          "color": "#dddd00"
-        },
-        {
-          "visibility": "off"
-        }
-      ]
-    },
-    {
-      "featureType": "road",
-      "elementType": "geometry",
-      "stylers": [
-        {
-          "color": "#38414e"
-        }
-      ]
-    },
-    {
-      "featureType": "road",
-      "elementType": "geometry.stroke",
-      "stylers": [
-        {
-          "color": "#212a37"
-        }
-      ]
-    },
-    {
-      "featureType": "road",
-      "elementType": "labels.text.fill",
-      "stylers": [
-        {
-          "color": "#9ca5b3"
-        }
-      ]
-    },
-    {
-      "featureType": "road.arterial",
-      "elementType": "geometry.fill",
-      "stylers": [
-        {
-          "color": "#5c5c5c"
-        }
-      ]
-    },
-    {
-      "featureType": "road.highway",
-      "elementType": "geometry",
-      "stylers": [
-        {
-          "color": "#746855"
-        }
-      ]
-    },
-    {
-      "featureType": "road.highway",
-      "elementType": "geometry.fill",
-      "stylers": [
-        {
-          "color": "#979700"
-        }
-      ]
-    },
-    {
-      "featureType": "road.highway",
-      "elementType": "geometry.stroke",
-      "stylers": [
-        {
-          "color": "#1f2835"
-        }
-      ]
-    },
-    {
-      "featureType": "road.highway",
-      "elementType": "labels.text.fill",
-      "stylers": [
-        {
-          "color": "#f3d19c"
-        }
-      ]
-    },
-    {
-      "featureType": "road.local",
-      "elementType": "geometry.fill",
-      "stylers": [
-        {
-          "color": "#4e4e4e"
-        }
-      ]
-    },
-    {
-      "featureType": "transit",
-      "elementType": "geometry",
-      "stylers": [
-        {
-          "color": "#2f3948"
-        }
-      ]
-    },
-    {
-      "featureType": "transit.station",
-      "elementType": "labels.text.fill",
-      "stylers": [
-        {
-          "color": "#d59563"
-        }
-      ]
-    },
-    {
-      "featureType": "water",
-      "elementType": "geometry",
-      "stylers": [
-        {
-          "color": "#17263c"
-        }
-      ]
-    },
-    {
-      "featureType": "water",
-      "elementType": "labels.text.fill",
-      "stylers": [
-        {
-          "color": "#515c6d"
-        }
-      ]
-    },
-    {
-      "featureType": "water",
-      "elementType": "labels.text.stroke",
-      "stylers": [
-        {
-          "color": "#17263c"
-        }
-      ]
-    }
+        "elementType": "geometry",
+        "stylers": [
+          {
+            "color": "#242f3e"
+          }
+        ]
+      },
+      {
+        "elementType": "labels.text.fill",
+        "stylers": [
+          {
+            "color": "#746855"
+          }
+        ]
+      },
+      {
+        "elementType": "labels.text.stroke",
+        "stylers": [
+          {
+            "color": "#242f3e"
+          }
+        ]
+      },
+      {
+        "featureType": "administrative.locality",
+        "elementType": "labels.text.fill",
+        "stylers": [
+          {
+            "color": "#d59563"
+          }
+        ]
+      },
+      {
+        "featureType": "poi",
+        "elementType": "labels.text.fill",
+        "stylers": [
+          {
+            "color": "#d59563"
+          }
+        ]
+      },
+      {
+        "featureType": "poi.park",
+        "elementType": "geometry",
+        "stylers": [
+          {
+            "color": "#263c3f"
+          }
+        ]
+      },
+      {
+        "featureType": "poi.park",
+        "elementType": "labels.text.fill",
+        "stylers": [
+          {
+            "color": "#6b9a76"
+          }
+        ]
+      },
+      {
+        "featureType": "road",
+        "elementType": "geometry",
+        "stylers": [
+          {
+            "color": "#38414e"
+          }
+        ]
+      },
+      {
+        "featureType": "road",
+        "elementType": "geometry.stroke",
+        "stylers": [
+          {
+            "color": "#212a37"
+          }
+        ]
+      },
+      {
+        "featureType": "road",
+        "elementType": "labels.text.fill",
+        "stylers": [
+          {
+            "color": "#9ca5b3"
+          }
+        ]
+      },
+      {
+        "featureType": "road.highway",
+        "elementType": "geometry",
+        "stylers": [
+          {
+            "color": "#746855"
+          }
+        ]
+      },
+      {
+        "featureType": "road.highway",
+        "elementType": "geometry.stroke",
+        "stylers": [
+          {
+            "color": "#1f2835"
+          }
+        ]
+      },
+      {
+        "featureType": "road.highway",
+        "elementType": "labels.text.fill",
+        "stylers": [
+          {
+            "color": "#f3d19c"
+          }
+        ]
+      },
+      {
+        "featureType": "transit",
+        "elementType": "geometry",
+        "stylers": [
+          {
+            "color": "#2f3948"
+          }
+        ]
+      },
+      {
+        "featureType": "transit.station",
+        "elementType": "labels.text.fill",
+        "stylers": [
+          {
+            "color": "#d59563"
+          }
+        ]
+      },
+      {
+        "featureType": "water",
+        "elementType": "geometry",
+        "stylers": [
+          {
+            "color": "#17263c"
+          }
+        ]
+      },
+      {
+        "featureType": "water",
+        "elementType": "labels.text.fill",
+        "stylers": [
+          {
+            "color": "#515c6d"
+          }
+        ]
+      },
+      {
+        "featureType": "water",
+        "elementType": "labels.text.stroke",
+        "stylers": [
+          {
+            "color": "#17263c"
+          }
+        ]
+      }
   ]
 
   render() {
-    
-    console.warn(User.avatar)
     return (
         <View style={styles.container}>
             <MapView
                 provider={PROVIDER_GOOGLE} // remove if not using Google Maps
                 style={styles.map}
                 region={{
-                    latitude: -7.7584436,
-                    longitude: 110.3759749,
-                    latitudeDelta: 0.0922,
-                    longitudeDelta: 0.0121,
+                    latitude: Number(this.state.myLocation.latitude),
+                    longitude: Number(this.state.myLocation.longitude),
+                    latitudeDelta: 0.0043,
+                    longitudeDelta: 0.0034,
                 }}
                 enableZoomControl={true}
                 showsUserLocation = {true}
-                showsMyLocationButton = {true}
                 zoomEnabled = {true}
                 customMapStyle={this.mapStyle}
             >
                 {this.state.users.map(marker => (
                     <Marker
-                        coordinate={marker.location}
+                        coordinate={
+                            {
+                                latitude: marker.location.latitude,
+                                longitude: marker.location.longitude,
+                                latitudeDelta: 0.0043,
+                                longitudeDelta: 0.0034
+                            }
+                        }
                         title={marker.name}
                         description={marker.email}
                     >
-                        {/* <View>
-                            <Image
-                                style={{height:50, width:50}}
-                                source={{ uri: 'https://cdn.vox-cdn.com/thumbor/wI3iu8sNbFJSQB4yMLsoPMNzIHU=/0x0:3368x3368/1200x800/filters:focal(1188x715:1726x1253)/cdn.vox-cdn.com/uploads/chorus_image/image/62994726/AJ_Finn_author_photo_color_photo_courtesy_of_the_author.0.jpg'}} 
-                            />
-                        </View> */}
                     </Marker>
                 ))}
             </MapView>
             <View style={styles.header}>
-                <TouchableOpacity
-                    onPress={() => this.handleView()}
-                >
-                    <Avatar
-                        rounded
-                        size="medium"
-                        source={{
-                            uri: User.avatar || 'https://cdn.iconscout.com/icon/free/png-256/user-avatar-contact-portfolio-personal-portrait-profile-1-5182.png',
-                        }}
-                    />
-                </TouchableOpacity>
+                <View style={{alignItems:'flex-start', width:55, marginLeft:5}}>
+                    <Avatar.Image size={40} source={{uri:User.image}} style={{backgroundColor:'#636363'}}/>
+                </View>
+                <View style={{alignItems:'flex-start', flex:2}}>
+                    <Text numberOfLines={1} style={{fontSize:18, color:'#fff'}}>{User.name}</Text>
+                </View>
+                <View style={{alignItems:'flex-end', flex:1, marginRight:5}}>
+                    <Button mode="contained" style={{borderRadius:10}} color={'#636363'} onPress={() => this.props.navigation.navigate('DetailProfile', User)}>
+                        View
+                    </Button>
+                </View>
             </View>
-                { (this.state.viewDetail == true) ?
-                    <View style={styles.detail}>
-                        <View style={styles.detailHeader}>
-                            <TouchableOpacity
-                                style={{position:'absolute', right:0, padding:5}}
-                                onPress={() => this.handleView()}
-                            >
-                                <Icon
-                                    name='close'
-                                    size={30}
-                                    color='rgba(0, 61, 61, 0.99)'
-                                />
-                            </TouchableOpacity>
-                            <Avatar
-                                containerStyle={{ left:30, top:55, opacity:10}}
-                                rounded
-                                size="large"
-                                source={{
-                                    uri: User.avatar || 'https://cdn.iconscout.com/icon/free/png-256/user-avatar-contact-portfolio-personal-portrait-profile-1-5182.png',
-                                }}
-                            />
-                            <View style={{ left:120, top:5 }}>
-                                <Text style={{fontSize:20, color:'rgba(237, 74, 74, 1)', fontWeight:'200'}}>ilham Yoga P.</Text>
-                                <Text style={{fontSize:13, color:'rgba(21, 98, 121, 0.92)'}}>ilhamyogha@gmail.com</Text>
-                            </View>
-                        </View>
-                        <ScrollView style={styles.detailBody}>
-                            <View style={{flexDirection:'row', alignItems:'center'}}>
-                                <View style={{elevation:5, borderRadius:50, height:50, width:50, justifyContent:'center', alignItems:'center', backgroundColor:'#ffffff'}}>
-                                    <Icon
-                                        name='call'
-                                        size={32}
-                                        color='rgba(172, 168, 245, 1)'
-                                    />
-                                </View>
-                                <Text style={{fontSize:15, color:'blue'}}>School</Text>
-                            </View>
-                            <View style={{flexDirection:'row'}}>
-                                <View style={{elevation:5, borderRadius:50, height:50, width:50, justifyContent:'center', alignItems:'center', backgroundColor:'#ffffff'}}>
-                                    <Icon
-                                        name='school'
-                                        size={32}
-                                        color='rgba(172, 168, 245, 1)'
-                                    />
-                                </View>
-                                <Text style={{fontSize:10, color:'blue'}}>School</Text>
-                            </View>
-                            <View style={{flexDirection:'row'}}>
-                                <View style={{elevation:5, borderRadius:50, height:50, width:50, justifyContent:'center', alignItems:'center', backgroundColor:'#ffffff'}}>
-                                    <Icon
-                                        name='school'
-                                        size={32}
-                                        color='rgba(172, 168, 245, 1)'
-                                    />
-                                </View>
-                                <Text style={{fontSize:10, color:'blue'}}>School</Text>
-                            </View>
-                        </ScrollView>
-                    </View>
-                    : null
-                }
-            <View style={styles.footer}>
-                <View style={{right:25, flex:1}}>
-                    <Button
-                        buttonStyle={{borderRadius:20, width:'90%'}}
-                        icon={
-                            <Icon
-                                style={{marginRight:10}}
-                                name="contacts"
-                                size={27}
-                                color="white"
-                            />
-                        }
-                        title="PEOPLE"
-                        onPress={()=> this.props.navigation.navigate('friendList')}
+            <View style={{width:'87%', position:'absolute', height:55, bottom:200, alignItems:'flex-end'}}>
+                <View style={{ width:55, height:55, alignItems:'center', justifyContent:'center', flex:1, backgroundColor:'rgba(26, 26, 26, 0.97)', borderRadius:50}}>
+                    <IconButton
+                        icon="my-location"
+                        color='#636363'
+                        size={24}
+                        onPress={() => this.setState({
+                          myLocation:{
+                            latitude: User.location.latitude,
+                            longitude: User.location.longitude
+                          }
+                        })}
                     />
                 </View>
-                <View style={{left:50, flex:1}}>
-                    <Button
-                        buttonStyle={{borderRadius:20, width:'90%'}}
-                        icon={
-                            <Icon
-                                style={{marginRight:10,}}
-                                name="forum"
-                                size={27}
-                                color="white"
-                            />
-                        }
-                        title="CHAT"
-                        onPress={()=> this.props.navigation.navigate('Chat')}
-                    />
+            </View>
+            <View style={styles.footer}>
+                <View style={{flex:1, alignItems:'center', borderBottomWidth:1, borderColor:'rgba(61, 61, 61, 1)'}}>
+                    <TouchableOpacity 
+                        style={{flex:1, width:'85%', marginRight:5, flexDirection:'row', alignItems:'center'}}
+                        onPress={() => this.props.navigation.navigate('Chat')}
+                    >
+                        <Icon
+                            name='bubbles'
+                            size={32}
+                            color='#2f7091'
+                        />
+                        <View style={{marginLeft:20}}>
+                            <Text style={{color:'#2f7091', fontWeight:'bold', fontSize:18, marginBottom:3}}>Chat</Text>
+                            <Text numberOfLines={1} style={{color:'#636363'}}>Chatting with friend</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+                <View style={{flex:1, alignItems:'center'}}>
+                    <TouchableOpacity 
+                        style={{flex:1, width:'85%', marginRight:5, flexDirection:'row', alignItems:'center'}}
+                        onPress={() => this.props.navigation.navigate('friendList')}
+                    >
+                        <Icon
+                            name='people'
+                            size={32}
+                            color='#337857'
+                        />
+                        <View style={{marginLeft:20}}>
+                            <Text style={{color:'#337857', fontWeight:'bold', fontSize:18, marginBottom:3}}>People</Text>
+                            <Text numberOfLines={1} style={{color:'#636363'}}>Find people who use this application</Text>
+                        </View>
+                    </TouchableOpacity>
                 </View>
             </View>
         </View>
@@ -419,6 +337,7 @@ const styles = StyleSheet.create({
     container:{
         flex:1,
         backgroundColor:'#2e3745',
+        alignItems:'center'
     },
 
     image: {
@@ -427,24 +346,31 @@ const styles = StyleSheet.create({
     },
 
     header:{
+        flexDirection:'row',
         position:'absolute',
-        left: 20,
-        top: 55,
-        flexDirection: 'row',  
+        borderRadius:25,
+        top: 30,
+        padding: 8,
+        height: 55,
+        width: '87%',
+        backgroundColor: 'rgba(26, 26, 26, 0.97)',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 
     footer:{
         flex:1,
         position:'absolute',
         bottom: 25,
-        justifyContent:'center',
-        alignItems:'center',
-        flexDirection: 'row',  
+        borderRadius:20,
+        height: 160,
+        width: '87%',
+        backgroundColor: 'rgba(26, 26, 26, 0.90)',  
     },
 
     detail:{
+        marginTop:50,
         height:'60%',
-        marginTop: 140,
         marginHorizontal: 30,
         backgroundColor: '#fff',
         elevation:5,
@@ -452,7 +378,7 @@ const styles = StyleSheet.create({
     },
 
     detailHeader:{
-        height:140,
+        height:110,
         backgroundColor:'cyan',
         elevation:2,
         borderTopLeftRadius:10,

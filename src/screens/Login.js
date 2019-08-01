@@ -22,14 +22,14 @@ export default class Login extends Component {
       password: '',
       isLoading: false,
     }
-    this._getLocation();
+    this.getLocation();
   }
 
   handleChange = key => val => {
     this.setState({ [key]: val })
   }
 
-  _getLocation = () => {
+  getLocation = () => {
     GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
       timeout: 15000,
@@ -67,8 +67,6 @@ export default class Login extends Component {
         User.uid = response.user.uid
         AsyncStorage.setItem('userUid', User.uid);
         this.updateLocation();
-        
-        console.warn('Tes 1')
 
         this.setState({ isLoading: false})
         this.props.navigation.navigate('Home')

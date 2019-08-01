@@ -20,9 +20,6 @@ export default class Chatting extends React.Component {
     super(props);
     this.state = {
         person: {
-          avatar: props.navigation.getParam('avatar'),
-          name: props.navigation.getParam('name'),
-          email: props.navigation.getParam('email'),
           uid: props.navigation.getParam('userUid')
         },
         textMessage: '',
@@ -31,7 +28,7 @@ export default class Chatting extends React.Component {
   }
 
   componentWillMount(){
-    firebase.database().ref('messages').child(User.uid).child(this.state.person.uid)
+    firebase.database().ref('messages').child(User.uid._55).child(this.state.person.uid)
       .on('child_added',(value)=>{
         this.setState((prevState)=>{
           console.warn(prevState.messageList, value.val())

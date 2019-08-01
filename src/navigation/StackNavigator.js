@@ -5,6 +5,7 @@ import Register from '../screens/Register';
 import Home from '../screens/Home';
 import Chat from '../screens/Chat';
 import friendList from '../screens/friendList';
+import DetailProfile from '../components/DetailProfile';
 import Chatting from '../components/Chatting';
 
 const MyStackNavigator = createStackNavigator({
@@ -19,6 +20,9 @@ const MyStackNavigator = createStackNavigator({
     },
     Home: {
         screen: Home
+    },
+    DetailProfile: {
+        screen: DetailProfile
     },
     Chat: {
         screen: Chat

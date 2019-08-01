@@ -10,7 +10,7 @@ import User from '../../User';
 export default class Auth extends Component {
     constructor(props){
         super(props);
-        this._bootstrapAsync()
+        this.bootstrapAsync()
     }
 
     static navigationOptions = {
@@ -33,7 +33,7 @@ export default class Auth extends Component {
         }
     }
 
-    _bootstrapAsync = async () => {
+    bootstrapAsync = async () => {
         User.uid = await AsyncStorage.getItem('userUid');
         this.props.navigation.navigate(User.uid ? 'Home' : 'Login')
     }

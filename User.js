@@ -1,10 +1,15 @@
 const User = {
     uid : null,
-    avatar : null,
+    image : null,
     name : null,
     email : null,
     phone : null,
-    location : null,
+    location : {
+        latitude : null,
+        longitude : null,
+    },
+    aboutMe : null,
+    personUid : null,
 }
 
 export default User;

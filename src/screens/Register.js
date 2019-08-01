@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Input } from 'react-native-elements';
 
 import firebase from 'firebase';
+import GetLocation from 'react-native-get-location'
 
 export default class Login extends Component {
 
@@ -15,14 +16,35 @@ export default class Login extends Component {
     title: 'Sign Up'
   }
 
-  state = {
-    image: '',
-    name: '',
-		email: '',
-    password: '',
-    phone: '',
-    isLoading: false,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      image: '' || 'PersonImage',
+      name: '',
+      email: '',
+      password: '',
+      phone: '',
+      aboutMe: '' || "Hello... Let's chat with me",
+      isLoading: false,
+    }
+    this.getLocation();
+  }
+
+  getLocation = () => {
+    GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 15000,
+    })
+    .then(location => {
+        this.setState({
+          latitude: location.latitude,
+          longitude: location.longitude,
+        })
+    })
+    .catch(error => {
+        alert('Get location error')
+    })
+  }
 
   handleChange = key => val => {
     this.setState({ [key]: val })
@@ -40,6 +62,11 @@ export default class Login extends Component {
             email: this.state.email,
             password: this.state.password,
             phone: this.state.phone,
+            location: {
+              latitude: this.state.latitude,
+              longitude: this.state.longitude
+            },
+            aboutMe: this.state.aboutMe
           })
           this.props.navigation.navigate('Login')
       })
