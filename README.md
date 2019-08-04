@@ -8,7 +8,7 @@ Here is my new github repository that is build an Chat App with User Map Trackin
 
 In this project i'am using firebase as database. Why ? because Firebase provides a realtime database and backend as a service. The service provides application developers an API that allows application data to be synchronized across clients and stored on Firebase's cloud.
 
-**Note**
+**Note**<br>
 If u want develope and take a part to make this app more better, feel free to fork or clone this repository and tag me as creator.
 
 ## Requirements
