@@ -1,16 +1,14 @@
 # Chat App with Maps Tracking
-</br>
 ## Introduction
 [![React Native](https://img.shields.io/badge/React%20Native-0.60-blue.svg?style=rounded-square)](https://facebook.github.io/react-native/)
 [![Firebase](https://img.shields.io/badge/Firebase-orange.svg?style=rounded-square)](https://console.firebase.google.com)
 [![React Navigation](https://img.shields.io/badge/React%20Navigation-^3.11-purple.svg?style=rounded-square)](https://reactnavigation.org)
-</br>
 
 Here is my new github repository that is build an Chat App with User Map Tracking.
 
 In this project i'am using firebase as database. Why ? because Firebase provides a realtime database and backend as a service. The service provides application developers an API that allows application data to be synchronized across clients and stored on Firebase's cloud.
 
-**Note**</br>
+**Note**
 If u want develope and take a part to make this app more better, feel free to fork or clone this repository and tag me as creator.
 
 ## Requirements
@@ -41,6 +39,5 @@ If u want develope and take a part to make this app more better, feel free to fo
   - Happy to use this application !
 
 ## Screenshot
- </br>
 ## Demo
  Watch Here video-demo-apk.mp4
