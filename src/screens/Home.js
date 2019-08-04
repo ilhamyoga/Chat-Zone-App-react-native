@@ -234,8 +234,8 @@ export default class Home extends Component {
                 provider={PROVIDER_GOOGLE} // remove if not using Google Maps
                 style={styles.map}
                 region={{
-                    latitude: Number(this.state.myLocation.latitude),
-                    longitude: Number(this.state.myLocation.longitude),
+                    latitude: Number(this.state.myLocation.latitude) || Number(User.location.latitude),
+                    longitude: Number(this.state.myLocation.longitude) || Number(User.location.longitude),
                     latitudeDelta: 0.0043,
                     longitudeDelta: 0.0034,
                 }}

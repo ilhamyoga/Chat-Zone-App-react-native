@@ -27,7 +27,7 @@ export default class Chatting extends React.Component {
     }
   }
 
-  componentWillMount(){
+  componentDidMount(){
     firebase.database().ref('messages').child(User.uid._55).child(this.state.person.uid)
       .on('child_added',(value)=>{
         this.setState((prevState)=>{
@@ -44,30 +44,31 @@ export default class Chatting extends React.Component {
   }
 
   sendMessage = async () => {
-    let msgId = firebase.database().ref('messages').child(User.uid).child(this.state.person.uid).push().key
+    let msgId = firebase.database().ref('messages').child(User.uid._55).child(this.state.person.uid).push().key
     let updates  = {}
     let message = {
       _id: msgId,
       text: this.state.textMessage,
       createdAt: firebase.database.ServerValue.TIMESTAMP,
       user: {
-        _id: User.uid
+        _id: User.uid._55,
+        name: User.name,
+        avatar: User.image
       },
     }
-    updates['messages/'+ User.uid + '/' + this.state.person.uid + '/' + msgId] = message 
-    updates['messages/'+ this.state.person.uid + '/' + User.uid + '/' + msgId] = message 
+    updates['messages/'+ User.uid._55 + '/' + this.state.person.uid + '/' + msgId] = message 
+    updates['messages/'+ this.state.person.uid + '/' + User.uid._55 + '/' + msgId] = message 
     firebase.database().ref().update(updates);
     this.setState({ textMessage: '' });
   }
 
   render() {
-    console.warn(this.state.person.uid)
     return (
       <GiftedChat
         text={this.state.textMessage}
         messages={this.state.messageList}
         user={{
-            _id : User.uid
+            _id : User.uid._55
         }}
         onInputTextChanged={this.handleChange('textMessage')}
         onSend={this.sendMessage}
