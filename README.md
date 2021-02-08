@@ -18,7 +18,6 @@ If u want develope and take a part to make this app more better, feel free to fo
 3. Google Cloud (to make API Maps SDK)
 
 ## How to use this program
-### For Developers !
   - Clone this repo,
   - Open your command prompt / terminal, change your directory to this application and follow the commands belows
   ``` 
@@ -32,11 +31,6 @@ If u want develope and take a part to make this app more better, feel free to fo
   - Wait until finish the process
   - And finish, you can develop this application if you want.
   - Happy coding !
-
-### For Users!
-  - Donwload this application app-release.apk
-  - Install the application on your devices (the name of this apk chatzone2)
-  - Happy to use this application !
 
 ## Screenshot
 ## Demo
